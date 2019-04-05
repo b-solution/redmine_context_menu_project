@@ -1,0 +1,12 @@
+<% if @can && @project %>
+    <% @parent_issues = @issues.map{|issue| issue.project.issues.open}.reduce(:&) %>
+    <li class="folder">
+      <a href="#" class="submenu"><%= l(:field_parent_issue) %></a>
+      <ul>
+        <% @parent_issues.each do |p| -%>
+            <li><%= context_menu_link p.subject, bulk_update_issues_path(:ids => @issue_ids, :issue => {:parent_issue_id => p.id}, :back_url => @back), :method => :post,
+                                      :selected => (@issue && p.id == @issue.parent_issue_id), :disabled => !@can[:edit] %></li>
+        <% end -%>
+      </ul>
+    </li>
+<% end %>
